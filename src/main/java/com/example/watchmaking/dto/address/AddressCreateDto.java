@@ -1,7 +1,6 @@
-package com.example.watchmaking.dto;
+package com.example.watchmaking.dto.address;
 
 
-import com.example.watchmaking.entity.Address;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +22,4 @@ public class AddressCreateDto {
     @NotBlank @Length(min = 8, max = 20)
     String zipCode;
     String complement;
-
 }

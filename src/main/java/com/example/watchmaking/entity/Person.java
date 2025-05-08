@@ -1,5 +1,6 @@
 package com.example.watchmaking.entity;
 
+import com.example.watchmaking.dto.person.PersonUpdateDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
@@ -55,5 +56,14 @@ public class Person {
         this.birthDate = birthDate;
         this.phone = phone;
         this.address = address;
+    }
+
+    public Person(PersonUpdateDto updateDto, Person person) {
+        this.uuid = person.getUuid();
+        this.name = updateDto.getName() != null ?  updateDto.getName() : person.getName();
+        this.cpf = updateDto.getCpf() != null ?  updateDto.getCpf() : person.getCpf();
+        this.birthDate = updateDto.getBirthDate() != null ?  updateDto.getBirthDate() : person.getBirthDate();
+        this.phone = updateDto.getPhone() != null ? updateDto.getPhone() : person.getPhone();
+        this.address= updateDto.getAddress() != null ? new Address(updateDto.getAddress(),person.getAddress()) : person.getAddress();
     }
 }

@@ -1,13 +1,10 @@
-package com.example.watchmaking.dto;
+package com.example.watchmaking.dto.person;
 
-import com.example.watchmaking.entity.Address;
+import com.example.watchmaking.dto.address.AddressCreateDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 

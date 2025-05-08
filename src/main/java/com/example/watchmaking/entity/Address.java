@@ -1,5 +1,6 @@
 package com.example.watchmaking.entity;
 
+import com.example.watchmaking.dto.address.AddressUpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -59,5 +60,16 @@ public class Address {
         this.state = state;
         this.zipCode = zipCode;
         this.complement = complement;
+    }
+
+    public Address (AddressUpdateDto  addressUpdateDto, Address address) {
+        this.uuid = address.getUuid();
+        this.street = addressUpdateDto.getStreet() != null ? addressUpdateDto.getStreet() : address.getStreet();
+        this.number = addressUpdateDto.getNumber() != null ? addressUpdateDto.getNumber() : address.getNumber();
+        this.neighborhood = addressUpdateDto.getNeighborhood() != null ? addressUpdateDto.getNeighborhood() : address.getNeighborhood();
+        this.city = addressUpdateDto.getCity() != null ? addressUpdateDto.getCity() : address.getCity();
+        this.state = addressUpdateDto.getState() != null ? addressUpdateDto.getState() : address.getState();
+        this.zipCode = addressUpdateDto.getZipCode() != null ? addressUpdateDto.getZipCode() : address.getZipCode();
+        this.complement = addressUpdateDto.getComplement() != null ? addressUpdateDto.getComplement() : address.getComplement();
     }
 }

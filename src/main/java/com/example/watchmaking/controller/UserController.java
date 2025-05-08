@@ -1,10 +1,12 @@
 package com.example.watchmaking.controller;
 
-import com.example.watchmaking.dto.UserCreateDto;
-import com.example.watchmaking.dto.UserViewDto;
+import com.example.watchmaking.dto.user.UserCreateDto;
+import com.example.watchmaking.dto.user.UserUpdatePasswordDto;
+import com.example.watchmaking.dto.user.UserViewDto;
 import com.example.watchmaking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,13 +18,25 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
-        userService.createUser(userCreateDto);
-        return ResponseEntity.ok("User created successfully");
+       userService.createUser(userCreateDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<UserViewDto> findByEmail(@PathVariable String email) {
         UserViewDto userViewDto = new UserViewDto(userService.findUserByEmail(email));
         return ResponseEntity.ok(userViewDto);
+    }
+
+    @PutMapping("/updatePassword/{email}")
+    public ResponseEntity<String> updatePassword(@PathVariable String email,@Valid @RequestBody UserUpdatePasswordDto newPassword) {
+        userService.updatePasswordByEmail(email, newPassword);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/email/{email}")
+    public ResponseEntity<String> deleteUserByEmail(@PathVariable String email) {
+        userService.softDeleteUserByEmail(email);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,8 +1,9 @@
 package com.example.watchmaking.service;
 
-import com.example.watchmaking.dto.AddressCreateDto;
-import com.example.watchmaking.dto.PersonCreateDto;
-import com.example.watchmaking.dto.UserCreateDto;
+import com.example.watchmaking.dto.address.AddressCreateDto;
+import com.example.watchmaking.dto.person.PersonCreateDto;
+import com.example.watchmaking.dto.user.UserCreateDto;
+import com.example.watchmaking.dto.user.UserUpdatePasswordDto;
 import com.example.watchmaking.entity.Address;
 import com.example.watchmaking.entity.Person;
 import com.example.watchmaking.entity.User;
@@ -59,7 +60,7 @@ public class UserService {
                 address));
 
         UserType userType = userTypeRepository.findById(dto.getUserTypeUuid())
-                .orElseThrow(() -> new NotFoundException("User type not found"));
+                .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
 
         User user = new User(
                 dto.getEmail(),
@@ -72,13 +73,37 @@ public class UserService {
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
     }
 
-    private void validate(UserCreateDto dto){
+    @Transactional
+    public void softDeleteUserByEmail(String email) {
+        User user = this.findUserByEmail(email);
+
+        userRepository.softDeleteByEmail(email);
+    }
+
+    @Transactional
+    public void updatePasswordByEmail(String email, UserUpdatePasswordDto newPassword) {
+        User user = this.findUserByEmail(email);
+
+        // TODO: codificar a senha com bcrypt (ex: newPassword = passwordEncoder.encode(newPassword))
+
+        User newUser = new User(
+                user.getUuid(),
+                user.getEmail(),
+                newPassword.getNewPassword(),
+                user.getUserType(),
+                user.getPerson()
+        );
+
+        userRepository.save(newUser);
+    }
+
+    private void validate(UserCreateDto dto) {
         Map<String, String> error = new HashMap<>();
         if (userRepository.existsByEmail(dto.getEmail())) {
-            error.put("email " ," já existente");
+            error.put("email ", " já existente");
         }
         if (userRepository.existsUserByPerson_Cpf(dto.getPerson().getCpf())) {
             error.put("cpf ", " já existente");
@@ -88,5 +113,8 @@ public class UserService {
             throw new IllegalArgumentException(String.valueOf(error));
         }
     }
+
+    private static final String PASSWORD_REGEX =
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$";
 
 }

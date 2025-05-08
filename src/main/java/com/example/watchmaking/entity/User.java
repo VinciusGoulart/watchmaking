@@ -53,4 +53,12 @@ public class User {
         this.userType = userType;
         this.person = person;
     }
+
+    public User(UUID uuid, String email, String password, UserType userType, Person person) {
+        this.uuid = uuid;
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+        this.person = person;
+    }
 }

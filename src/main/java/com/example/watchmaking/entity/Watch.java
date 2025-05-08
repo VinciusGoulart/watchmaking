@@ -6,7 +6,6 @@ import lombok.*;
 @Entity
 @Table(name = "watches")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true,of = "uuid")

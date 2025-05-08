@@ -1,8 +1,9 @@
 package com.example.watchmaking.service;
 
-import com.example.watchmaking.dto.AddressCreateDto;
-import com.example.watchmaking.dto.PersonCreateDto;
-import com.example.watchmaking.dto.UserCreateDto;
+import com.example.watchmaking.dto.address.AddressCreateDto;
+import com.example.watchmaking.dto.person.PersonCreateDto;
+import com.example.watchmaking.dto.user.UserCreateDto;
+import com.example.watchmaking.dto.user.UserUpdatePasswordDto;
 import com.example.watchmaking.entity.Address;
 import com.example.watchmaking.entity.Person;
 import com.example.watchmaking.entity.User;
@@ -24,7 +25,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -201,4 +202,46 @@ class UserServiceTest {
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
     }
+
+    @Test
+    void softDeleteUserByEmail_Success() {
+        // Arrange
+        String email = "joao@teste.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+
+        // Act
+        userService.softDeleteUserByEmail(email);
+
+        // Assert
+        verify(userRepository, times(1)).findByEmail(email);
+        verify(userRepository, times(1)).softDeleteByEmail(email);
+    }
+
+    @Test
+    void softDeleteUserByEmail_UserNotFound_ShouldThrow() {
+        // Arrange
+        String email = "naoexiste@teste.com";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () -> userService.softDeleteUserByEmail(email));
+    }
+
+    @Test
+    void updatePasswordByEmail_Success() {
+        // Arrange
+        String email = "joao@teste.com";
+        UserUpdatePasswordDto dto = new UserUpdatePasswordDto("Nova@Senha1");
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Act
+        userService.updatePasswordByEmail(email, dto);
+
+        // Assert
+        verify(userRepository).findByEmail(email);
+        verify(userRepository).save(any(User.class));
+    }
+
 }

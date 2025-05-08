@@ -1,4 +1,4 @@
-package com.example.watchmaking.dto;
+package com.example.watchmaking.dto.user;
 
 import com.example.watchmaking.entity.User;
 import lombok.AllArgsConstructor;
