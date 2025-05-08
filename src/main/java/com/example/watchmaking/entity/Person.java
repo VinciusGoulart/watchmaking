@@ -15,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "uuid")
 public class Person {
 
@@ -49,4 +48,12 @@ public class Person {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_uuid")
     private Address address;
+
+    public Person(String name, String cpf, LocalDate birthDate, String phone, Address address) {
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
+        this.phone = phone;
+        this.address = address;
+    }
 }

@@ -16,7 +16,6 @@ import java.util.UUID;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-@AllArgsConstructor
 @EqualsAndHashCode
 public class User {
     @Id
@@ -47,4 +46,11 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "persons_uuid", nullable = false)
     private Person person;
+
+    public User(String email, String password, UserType userType, Person person) {
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+        this.person = person;
+    }
 }

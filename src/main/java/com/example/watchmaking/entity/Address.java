@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "uuid")
 public class Address {
 
@@ -51,4 +50,14 @@ public class Address {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Address(String street, String number, String neighborhood, String city, String state, String zipCode, String complement) {
+        this.street = street;
+        this.number = number;
+        this.neighborhood = neighborhood;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.complement = complement;
+    }
 }
