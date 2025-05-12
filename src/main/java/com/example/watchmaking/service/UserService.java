@@ -13,6 +13,7 @@ import com.example.watchmaking.repository.PersonRepository;
 import com.example.watchmaking.repository.UserRepository;
 import com.example.watchmaking.repository.UserTypeRepository;
 import com.example.watchmaking.util.expcetions.NotFoundException;
+import com.example.watchmaking.util.expcetions.ResourceExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,7 +111,7 @@ public class UserService {
         }
 
         if (!error.isEmpty()) {
-            throw new IllegalArgumentException(String.valueOf(error));
+            throw new ResourceExistsException(String.valueOf(error));
         }
     }
 
