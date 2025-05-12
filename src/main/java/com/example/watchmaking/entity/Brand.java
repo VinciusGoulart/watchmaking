@@ -1,5 +1,7 @@
 package com.example.watchmaking.entity;
 
+import com.example.watchmaking.dto.brand.BrandCreateDto;
+import com.example.watchmaking.dto.brand.BrandUpdateDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -37,4 +39,17 @@ public class Brand {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Brand(BrandCreateDto brandCreateDto) {
+        this.name = brandCreateDto.getName();
+        this.country = brandCreateDto.getCountry();
+        this.isDeleted = false;
+    }
+
+    public Brand(UUID uuid, BrandUpdateDto brandUpdateDto) {
+        this.uuid = uuid;
+        this.name = brandUpdateDto.getName() != null ? brandUpdateDto.getName() : this.name;
+        this.country = brandUpdateDto.getCountry() != null ? brandUpdateDto.getCountry() : this.country;
+        this.isDeleted = brandUpdateDto.getIsDeleted()!= null ? brandUpdateDto.getIsDeleted() : this.isDeleted;
+    }
 }

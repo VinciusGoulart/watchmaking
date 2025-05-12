@@ -23,19 +23,19 @@ public class Watch extends Product {
     private String dialColor;
     private String strapMaterial;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "brand_id")
-//    private Brand brand;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "watch_type_id")
-//    private WatchType watchType;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "category_id")
-//    private WatchCategory watchCategory;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "image_id")
-//    private Storage image; // Entidade para armazenamento de imagens
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_uuid")
+    private Brand brand;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "watch_type_uuid")
+    private WatchType watchType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_uuid")
+    private WatchCategory watchCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_uuid")
+    private Storage image;
 }
