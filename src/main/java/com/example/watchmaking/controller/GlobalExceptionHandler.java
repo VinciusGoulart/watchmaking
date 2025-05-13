@@ -2,8 +2,10 @@ package com.example.watchmaking.controller;
 
 import com.example.watchmaking.util.expcetions.NotFoundException;
 import com.example.watchmaking.util.expcetions.ResourceExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,12 +37,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceExistsException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(ResourceExistsException ex) {
+    public ResponseEntity<String> handleResourceExistsException(ResourceExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URI não encontrada");
     }
 
