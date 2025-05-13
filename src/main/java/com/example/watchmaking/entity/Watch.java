@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true,of = "uuid")
+@EqualsAndHashCode(callSuper = true)
 public class Watch extends Product {
 
     @Column(nullable = false)

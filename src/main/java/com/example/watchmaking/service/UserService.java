@@ -79,7 +79,7 @@ public class UserService {
 
     @Transactional
     public void softDeleteUserByEmail(String email) {
-        User user = this.findUserByEmail(email);
+        this.findUserByEmail(email);
 
         userRepository.softDeleteByEmail(email);
     }
