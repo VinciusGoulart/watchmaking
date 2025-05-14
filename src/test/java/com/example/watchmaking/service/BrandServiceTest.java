@@ -132,4 +132,36 @@ class BrandServiceTest {
         verify(brandRepository, times(1)).existsByUuid(uuid);
     }
 
+    @Test
+    void getBrand_Success() {
+        // Arrange
+        UUID uuid = UUID.randomUUID();
+        Brand expectedBrand = new Brand(uuid, "Rolex", "Suíça", false, null, null);
+
+        when(brandRepository.findByUuid(uuid)).thenReturn(Optional.of(expectedBrand));
+
+        // Act
+        Brand result = brandService.findByUuid(uuid);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(uuid, result.getUuid());
+        verify(brandRepository).findByUuid(uuid);
+    }
+
+    @Test
+    void getBrand_ThrowError() {
+        // Arrange
+        UUID uuid = UUID.randomUUID();
+        when(brandRepository.findByUuid(uuid)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> brandService.findByUuid(uuid)
+        );
+        assertEquals("Marca não encontrada!", exception.getMessage());
+        verify(brandRepository).findByUuid(uuid);
+    }
+
 }

@@ -50,4 +50,8 @@ public class WatchCategory {
         this.createdAt = watchCategory.getCreatedAt();
         this.updatedAt = watchCategory.getUpdatedAt();
     }
+
+    public WatchCategory(UUID uuid) {
+        this.uuid = uuid;
+    }
 }

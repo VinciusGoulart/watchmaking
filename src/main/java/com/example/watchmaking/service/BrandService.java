@@ -50,4 +50,9 @@ public class BrandService {
         return brandRepository.save(newBrand);
     }
 
+    public Brand findByUuid(UUID uuid) {
+        return brandRepository.findByUuid(uuid)
+                .orElseThrow(() -> new NotFoundException("Marca não encontrada!"));
+    }
+
 }

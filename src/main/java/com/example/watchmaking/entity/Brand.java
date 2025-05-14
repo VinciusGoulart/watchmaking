@@ -52,4 +52,8 @@ public class Brand {
         this.country = brandUpdateDto.getCountry() != null ? brandUpdateDto.getCountry() : this.country;
         this.isDeleted = brandUpdateDto.getIsDeleted()!= null ? brandUpdateDto.getIsDeleted() : this.isDeleted;
     }
+
+    public Brand(UUID uuid) {
+        this.uuid = uuid;
+    }
 }

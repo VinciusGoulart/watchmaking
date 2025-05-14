@@ -9,11 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface WatchCategoryRepository extends JpaRepository<WatchCategory, UUID>  {
 
     Optional<WatchCategory> findByCode(String code);
@@ -50,4 +52,6 @@ public interface WatchCategoryRepository extends JpaRepository<WatchCategory, UU
     @Modifying
     @Query("UPDATE WatchCategory w SET w.isDeleted = true WHERE w.code = :code")
     void softDeleteByCode(@Param("code") String code);
+
+    Optional<WatchCategory> findByUuid(UUID uuid);
 }

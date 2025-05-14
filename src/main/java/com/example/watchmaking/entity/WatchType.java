@@ -52,4 +52,8 @@ public class WatchType {
         this.createdAt = watchCategory.getCreatedAt();
         this.updatedAt = watchCategory.getUpdatedAt();
     }
+
+    public WatchType(UUID uuid) {
+        this.uuid = uuid;
+    }
 }

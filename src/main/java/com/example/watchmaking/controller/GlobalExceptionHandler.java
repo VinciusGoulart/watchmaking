@@ -1,7 +1,6 @@
 package com.example.watchmaking.controller;
 
-import com.example.watchmaking.util.expcetions.NotFoundException;
-import com.example.watchmaking.util.expcetions.ResourceExistsException;
+import com.example.watchmaking.util.expcetions.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +46,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("URI não encontrada");
     }
 
+    @ExceptionHandler(CreateDiretoryException.class)
+    public ResponseEntity<String> handleCreateDiretoryException(CreateDiretoryException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
 
+    @ExceptionHandler(SaveFileException.class)
+    public ResponseEntity<String> handleSaveFileException(SaveFileException ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFileTypeException.class)
+    public ResponseEntity<String> handleInvalidFileTypeException(InvalidFileTypeException ex) {
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<String> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("O tamanho do arquivo excede o limite de 20MB.");
+    }
 
 }

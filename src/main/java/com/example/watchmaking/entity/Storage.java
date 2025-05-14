@@ -33,4 +33,8 @@ public class Storage {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    public Storage(UUID uuid) {
+        this.uuid = uuid;
+    }
 }
