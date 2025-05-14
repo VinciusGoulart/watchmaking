@@ -31,12 +31,12 @@ public class WatchService {
     private WatchTypeService watchTypeService;
 
     @Transactional
-    public Watch createWatch(WatchCreateDto dto) {
+    public void createWatch(WatchCreateDto dto) {
         Brand brand = dto.getBrandUuid() != null ? brandService.findByUuid(dto.getBrandUuid()) : null;
         WatchType watchType = dto.getWatchTypeCode() != null ? watchTypeService.findWatchTypeByCode(dto.getWatchTypeCode()) : null;
         WatchCategory watchCategory = dto.getWatchCategoryCode() != null ? watchCategoryService.findWatchCategoryByCode(dto.getWatchCategoryCode()) : null;
         Watch watch = new Watch(dto, brand, watchType, watchCategory, null);
-        return watchRepository.save(watch);
+        watchRepository.save(watch);
     }
 
     public Watch findByUuid(UUID uuid) {
@@ -44,13 +44,12 @@ public class WatchService {
                 .orElseThrow(() -> new NotFoundException("Relógio não encontrado!"));
     }
 
-    public Watch updateWatch(UUID brandUuid, UUID storageUuid, WatchUpdateDto dto) {
+    public void updateWatch(UUID brandUuid, WatchUpdateDto dto) {
         if (!watchRepository.existsByUuid(brandUuid)) {
             throw new NotFoundException("Relógio não encontrado!");
         }
-        dto.setImageUuid(storageUuid);
         Watch newWatch = new Watch(brandUuid, dto);
-        return watchRepository.save(newWatch);
+        watchRepository.save(newWatch);
     }
 
     public Page<WatchViewDto> listWatch(Pageable pageable) {

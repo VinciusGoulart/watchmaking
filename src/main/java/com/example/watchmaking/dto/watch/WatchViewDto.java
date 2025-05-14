@@ -1,5 +1,6 @@
 package com.example.watchmaking.dto.watch;
 
+import com.example.watchmaking.entity.Storage;
 import com.example.watchmaking.entity.Watch;
 import lombok.Data;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class WatchViewDto {
     private UUID brandUuid;
     private UUID watchTypeUuid;
     private UUID watchCategoryUuid;
-    private UUID imageUuid;
+    private List<UUID> imagesUuids;
 
     public static List<WatchViewDto> createListWatchViewDto(Page<Watch> watches) {
         List<WatchViewDto> watchViewDtos = new ArrayList<WatchViewDto>();
@@ -47,7 +48,7 @@ public class WatchViewDto {
             dto.setBrandUuid(watch.getBrand() != null ? watch.getBrand().getUuid() : null);
             dto.setWatchTypeUuid(watch.getWatchType() != null ? watch.getWatchType().getUuid() : null);
             dto.setWatchCategoryUuid(watch.getWatchCategory() != null ? watch.getWatchCategory().getUuid() : null);
-            dto.setImageUuid(watch.getImage() != null ? watch.getImage().getUuid() : null);
+            dto.setImagesUuids(watch.getImages() != null ? watch.getImages().stream().map(Storage::getUuid).toList() : null);
             watchViewDtos.add(dto);
         }
         return watchViewDtos;
