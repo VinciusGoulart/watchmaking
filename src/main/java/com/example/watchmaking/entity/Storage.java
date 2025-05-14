@@ -1,5 +1,6 @@
 package com.example.watchmaking.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,7 +35,8 @@ public class Storage {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public Storage(UUID uuid) {
-        this.uuid = uuid;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "watch_uuid")
+    @JsonIgnore
+    private Watch watch;
 }

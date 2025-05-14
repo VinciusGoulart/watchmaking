@@ -1,9 +1,8 @@
 package com.example.watchmaking.dto.watch;
 
+import com.example.watchmaking.entity.Storage;
 import com.example.watchmaking.entity.Watch;
 import com.example.watchmaking.util.enums.GenderEnum;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -35,7 +35,7 @@ public class WatchUpdateDto {
     private UUID watchTypeUuid;
     private UUID watchCategoryUuid;
     @Setter
-    private UUID imageUuid;
+    private List<Storage> images;
 
     public WatchUpdateDto(Watch watch) {
         this.name = watch.getName();
@@ -53,6 +53,6 @@ public class WatchUpdateDto {
         this.brandUuid = watch.getBrand() != null ? watch.getBrand().getUuid() : null;
         this.watchTypeUuid = watch.getWatchType() != null ? watch.getWatchType().getUuid() : null;
         this.watchCategoryUuid = watch.getWatchCategory() != null ? watch.getWatchCategory().getUuid() : null;
-        this.imageUuid = watch.getImage() != null ? watch.getImage().getUuid() : null;
+        this.images = watch.getImages() != null ? watch.getImages() : null;
     }
 }

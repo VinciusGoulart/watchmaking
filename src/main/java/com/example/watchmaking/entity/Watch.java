@@ -2,10 +2,14 @@ package com.example.watchmaking.entity;
 
 import com.example.watchmaking.dto.watch.WatchCreateDto;
 import com.example.watchmaking.dto.watch.WatchUpdateDto;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -40,11 +44,11 @@ public class Watch extends Product {
     @JoinColumn(name = "category_uuid")
     private WatchCategory watchCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_uuid")
-    private Storage image;
+    @OneToMany(mappedBy = "watch", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Storage> images = new ArrayList<>();
 
-    public Watch(WatchCreateDto dto, Brand brand, WatchType watchType, WatchCategory watchCategory, Storage image) {
+
+    public Watch(WatchCreateDto dto, Brand brand, WatchType watchType, WatchCategory watchCategory, List<Storage> images) {
         super(null, dto.getName(), dto.getDescription(), dto.getPrice(), dto.getQuantity(), false, null, null);
         this.reference = dto.getReference();
         this.mechanism = dto.getMechanism();
@@ -56,7 +60,7 @@ public class Watch extends Product {
         this.brand = brand;
         this.watchType = watchType;
         this.watchCategory = watchCategory;
-        this.image = image;
+        this.images = images;
     }
 
     public Watch(UUID uuid, WatchUpdateDto dto) {
@@ -71,6 +75,6 @@ public class Watch extends Product {
         this.brand = dto.getBrandUuid() != null ? new Brand(dto.getBrandUuid()) : this.brand;
         this.watchType = dto.getWatchTypeUuid() != null ? new WatchType(dto.getWatchTypeUuid()) : this.watchType;
         this.watchCategory = dto.getWatchCategoryUuid() != null ? new WatchCategory(dto.getWatchCategoryUuid()) : this.watchCategory;
-        this.image = dto.getImageUuid() != null ? new Storage(dto.getImageUuid()) : this.image;
+        this.images = dto.getImages() != null ? dto.getImages(): this.images;
     }
 }

@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class StorageInsertDto {
     @NotNull
-    MultipartFile file;
+    List<MultipartFile> file;
 }
