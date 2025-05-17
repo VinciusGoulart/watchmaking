@@ -20,13 +20,17 @@ public class ServiceOrderItemViewDto {
     private BigDecimal subtotal;
     private UUID watchPartUuid;
 
-    public ServiceOrderItemViewDto(List<ServiceOrderItem> orderItems) {
-        for (ServiceOrderItem item : orderItems) {
-            this.uuid = item.getUuid();
-            this.unitPrice = item.getUnitPrice();
-            this.quantity = item.getQuantity();
-            this.subtotal = item.getSubtotal();
-            this.watchPartUuid = item.getWatchPart().getUuid();
-        }
+    public ServiceOrderItemViewDto(ServiceOrderItem item) {
+        this.uuid = item.getUuid();
+        this.unitPrice = item.getUnitPrice();
+        this.quantity = item.getQuantity();
+        this.subtotal = item.getSubtotal();
+        this.watchPartUuid = item.getWatchPart().getUuid();
+    }
+
+    public static List<ServiceOrderItemViewDto> fromEntityList(List<ServiceOrderItem> orderItems) {
+        return orderItems.stream()
+                .map(ServiceOrderItemViewDto::new)
+                .toList();
     }
 }
