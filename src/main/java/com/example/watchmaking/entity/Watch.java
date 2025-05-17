@@ -75,6 +75,27 @@ public class Watch extends Product {
         this.brand = dto.getBrandUuid() != null ? new Brand(dto.getBrandUuid()) : this.brand;
         this.watchType = dto.getWatchTypeUuid() != null ? new WatchType(dto.getWatchTypeUuid()) : this.watchType;
         this.watchCategory = dto.getWatchCategoryUuid() != null ? new WatchCategory(dto.getWatchCategoryUuid()) : this.watchCategory;
-        this.images = dto.getImages() != null ? dto.getImages(): this.images;
+        this.images = dto.getImages() != null ? dto.getImages() : this.images;
+    }
+
+    public Watch(Watch watch, WatchUpdateDto updateDto) {
+        super(watch.uuid, updateDto.getName() != null ? updateDto.getName() : watch.getName()
+                , updateDto.getDescription() != null ? updateDto.getDescription() : watch.getDescription()
+                , updateDto.getPrice() != null ? updateDto.getPrice() : watch.getPrice()
+                , updateDto.getQuantity() != null ? updateDto.getQuantity() : watch.getQuantity()
+                , updateDto.getIsDeleted() != null ? updateDto.getIsDeleted() : watch.getIsDeleted()
+                , null, null)
+        ;
+        this.reference = updateDto.getReference() != null ? updateDto.getReference() : watch.getReference();
+        this.mechanism = updateDto.getMechanism() != null ? updateDto.getMechanism() : watch.getMechanism();
+        this.gender = updateDto.getGender().name() != null ? updateDto.getGender().name() : watch.getGender();
+        this.material = updateDto.getMaterial() != null ? updateDto.getMaterial() : watch.getMaterial();
+        this.waterResistance = updateDto.getWaterResistance() != null ? updateDto.getWaterResistance() : watch.getWaterResistance();
+        this.dialColor = updateDto.getDialColor() != null ? updateDto.getDialColor() : watch.getDialColor();
+        this.strapMaterial = updateDto.getStrapMaterial() != null ? updateDto.getStrapMaterial() : watch.getStrapMaterial();
+        this.brand = updateDto.getBrandUuid() != null ? new Brand(updateDto.getBrandUuid()) : watch.getBrand();
+        this.watchType = updateDto.getWatchTypeUuid() != null ? new WatchType(updateDto.getWatchTypeUuid()) : watch.getWatchType();
+        this.watchCategory = updateDto.getWatchCategoryUuid() != null ? new WatchCategory(updateDto.getWatchCategoryUuid()) : watch.getWatchCategory();
+
     }
 }

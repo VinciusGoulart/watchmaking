@@ -1,9 +1,12 @@
 package com.example.watchmaking.controller;
 
 import com.example.watchmaking.util.expcetions.*;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -64,6 +68,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<String> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("O tamanho do arquivo excede o limite de 20MB.");
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        String message = "Erro de leitura do corpo da requisição.";
+
+        if (ex.getCause() instanceof InvalidFormatException cause) {
+            String fieldName = cause.getPath().stream()
+                    .map(JsonMappingException.Reference::getFieldName)
+                    .collect(Collectors.joining("."));
+
+            message = "O campo '" + fieldName + "' possui um valor inválido. Esperado: " + cause.getTargetType().getSimpleName();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(message);
     }
 
 }

@@ -55,4 +55,6 @@ public class WatchUpdateDto {
         this.watchCategoryUuid = watch.getWatchCategory() != null ? watch.getWatchCategory().getUuid() : null;
         this.images = watch.getImages() != null ? watch.getImages() : null;
     }
+
+
 }

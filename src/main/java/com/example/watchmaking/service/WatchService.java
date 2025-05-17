@@ -44,11 +44,19 @@ public class WatchService {
                 .orElseThrow(() -> new NotFoundException("Relógio não encontrado!"));
     }
 
-    public void updateWatch(UUID brandUuid, WatchUpdateDto dto) {
-        if (!watchRepository.existsByUuid(brandUuid)) {
+    public void updateWatch(UUID uuid, WatchUpdateDto dto) {
+        if (!watchRepository.existsByUuid(uuid)) {
             throw new NotFoundException("Relógio não encontrado!");
         }
-        Watch newWatch = new Watch(brandUuid, dto);
+        Watch newWatch = new Watch(uuid, dto);
+        watchRepository.save(newWatch);
+    }
+
+    public void patchWatch(UUID uuid, WatchUpdateDto dto) {
+        Watch watch = findByUuid(uuid);
+
+        Watch newWatch = new Watch(watch, dto);
+
         watchRepository.save(newWatch);
     }
 

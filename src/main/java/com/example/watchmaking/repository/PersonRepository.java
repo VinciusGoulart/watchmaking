@@ -2,7 +2,6 @@ package com.example.watchmaking.repository;
 
 import com.example.watchmaking.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +21,5 @@ public interface PersonRepository extends JpaRepository<Person, UUID> {
 """)
     Optional<Person> findByUserEmail(@Param("email") String email);
 
+    Optional<Person> findByUuid(UUID uuid);
 }
