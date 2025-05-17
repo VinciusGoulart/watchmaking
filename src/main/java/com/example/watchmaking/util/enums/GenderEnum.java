@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum GenderEnum {
-    MALE("Male"),
-    FEMALE("Female"),
-    UNISEX("Unisex");
+    MALE("MALE"),
+    FEMALE("FEMALE"),
+    UNISEX("UNISEX");
 
     private String displayName;
 

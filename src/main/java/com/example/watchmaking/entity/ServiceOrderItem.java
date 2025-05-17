@@ -26,6 +26,7 @@ public class ServiceOrderItem {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column()
     private BigDecimal subtotal;
 
     @ManyToOne(fetch = FetchType.LAZY)

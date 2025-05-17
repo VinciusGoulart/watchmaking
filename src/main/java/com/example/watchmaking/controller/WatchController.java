@@ -39,4 +39,10 @@ public class WatchController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @DeleteMapping("/delete/{uuid}")
+    public ResponseEntity<Void> deleteWatch(@PathVariable("uuid") UUID uuid) {
+        watchService.softDeleteWatch(uuid);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
