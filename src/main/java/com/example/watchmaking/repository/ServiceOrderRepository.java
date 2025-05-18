@@ -32,7 +32,7 @@ public interface ServiceOrderRepository extends JpaRepository<ServiceOrder, UUID
     @Query(value = """
             SELECT
                 so.uuid,
-                so.service_type AS servicetype,
+                so.service_type AS serviceType,
                 so.status,
                 so.price,
                 so.delivery_date AS deliverydate,
@@ -47,10 +47,10 @@ public interface ServiceOrderRepository extends JpaRepository<ServiceOrder, UUID
                 (:search IS NULL 
                  OR LOWER(p.name) LIKE LOWER(concat('%', :search, '%'))
                  OR LOWER(u.email) LIKE LOWER(concat('%', :search, '%')))
-                AND (:servicetype IS NULL OR so.service_type = :servicetype)
+                AND (:serviceType IS NULL OR so.service_type = :serviceType)
                 AND (:status IS NULL OR so.status = :status)
-                AND (:startdate IS NULL OR so.delivery_date >= CAST(:startdate AS TIMESTAMP))
-                AND (:enddate IS NULL OR so.delivery_date <= CAST(:enddate AS TIMESTAMP))
+                AND (:startDate IS NULL OR so.delivery_date >= CAST(:startDate AS TIMESTAMP))
+                AND (:endDate IS NULL OR so.delivery_date <= CAST(:endDate AS TIMESTAMP))
             GROUP BY so.uuid, so.service_type, so.status, so.price, so.delivery_date, p.name, u.email
             ORDER BY so.delivery_date
             """,
@@ -63,10 +63,10 @@ public interface ServiceOrderRepository extends JpaRepository<ServiceOrder, UUID
                         (:search IS NULL
                          OR LOWER(p.name) LIKE LOWER(concat('%', :search, '%'))
                          OR LOWER(u.email) LIKE LOWER(concat('%', :search, '%')))
-                      AND (:servicetype IS NULL OR so.service_type = :servicetype)
+                      AND (:serviceType IS NULL OR so.service_type = :serviceType)
                       AND (:status IS NULL OR so.status = :status)
-                      AND (:startdate IS NULL OR so.delivery_date >= CAST(:startdate AS TIMESTAMP))
-                      AND (:enddate IS NULL OR so.delivery_date <= CAST(:enddate AS TIMESTAMP))
+                      AND (:startDate IS NULL OR so.delivery_date >= CAST(:startDate AS TIMESTAMP))
+                      AND (:endDate IS NULL OR so.delivery_date <= CAST(:endDate AS TIMESTAMP))
                     """,
             nativeQuery = true)
     Page<ServiceOrderListDto> listByFilters(
