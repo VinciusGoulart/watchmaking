@@ -40,20 +40,21 @@ public class ServiceOrderController {
         return ResponseEntity.ok().body(serviceOrder);
     }
 
+
     @GetMapping("/list")
     public ResponseEntity<Page<ServiceOrderListDto>> listWatchCategories(
             @PageableDefault(size = 20, sort = "delivery_date", direction = Sort.Direction.ASC) Pageable pageable,
             @RequestParam(required = false,defaultValue = "") String search,
             @RequestParam(required = false) ServiceType serviceType,
-            @RequestParam(required = false) ServiceStatus status,
+            @RequestParam(required = false,defaultValue = "") ServiceStatus status,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate
     ) {
         Page<ServiceOrderListDto> result = serviceOrderService.listServiceOrdersByFilters(
                 pageable,
                 search,
-                serviceType.toString(),
-                status.toString(),
+                serviceType != null ?  serviceType.toString() : null,
+                status != null ?  status.toString() : null,
                 startDate,
                 endDate
         );

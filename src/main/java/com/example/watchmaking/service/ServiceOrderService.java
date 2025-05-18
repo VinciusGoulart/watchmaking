@@ -11,10 +11,17 @@ import com.example.watchmaking.util.expcetions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -87,12 +94,12 @@ public class ServiceOrderService {
                 serviceOrder.getCreatedAt(),
                 serviceOrder.getUpdatedAt(),
                 !serviceOrder.getOrderItems().isEmpty() ? serviceOrder.getOrderItems().stream()
-                        .map(item -> new ServiceOrderItemViewDto(serviceOrder.getOrderItems())).toList()
+                        .map(ServiceOrderItemViewDto::new).toList()
                         : null
         );
     }
 
-    public Page<ServiceOrderListDto> listServiceOrdersByFilters(
+    public Page<ServiceOrderListDto>  listServiceOrdersByFilters(
             Pageable pageable,
             String search,
             String serviceType,
@@ -100,8 +107,30 @@ public class ServiceOrderService {
             LocalDateTime startDate,
             LocalDateTime endDate
     ) {
+        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("A data inicial não pode ser posterior à data final");
+        }
 
-        return serviceOrderRepository.listByFilters(pageable, search, serviceType, status, startDate, endDate);
+        LocalDateTime now = LocalDateTime.now();
+
+        if (startDate == null && endDate == null) {
+            startDate = now.minusDays(30);
+            endDate = now.plusDays(30);
+        }
+        else if (startDate != null && endDate == null) {
+            endDate = startDate.plusDays(60);
+        }
+        else if (startDate == null && endDate != null) {
+            startDate = endDate.minusDays(60);
+        }
+
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        if (daysBetween > 180) {
+            throw new IllegalArgumentException("O intervalo máximo permitido é de 180 dias");
+        }
+
+        return serviceOrderRepository.listByFilters(pageable, search, serviceType,
+                status, startDate.toString(), endDate.toString());
     }
 
     @Transactional
