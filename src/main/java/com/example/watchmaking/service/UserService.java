@@ -4,6 +4,7 @@ import com.example.watchmaking.dto.address.AddressCreateDto;
 import com.example.watchmaking.dto.person.PersonCreateDto;
 import com.example.watchmaking.dto.user.UserCreateDto;
 import com.example.watchmaking.dto.user.UserUpdatePasswordDto;
+import com.example.watchmaking.dto.user.UserViewDto;
 import com.example.watchmaking.entity.Address;
 import com.example.watchmaking.entity.Person;
 import com.example.watchmaking.entity.User;
@@ -82,9 +83,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public UserViewDto findUserByEmail(String email) {
+        User user=  userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        return new UserViewDto(user);
     }
 
     @Transactional

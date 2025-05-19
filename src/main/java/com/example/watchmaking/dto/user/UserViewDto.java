@@ -1,5 +1,7 @@
 package com.example.watchmaking.dto.user;
 
+import com.example.watchmaking.dto.person.PersonViewDto;
+import com.example.watchmaking.entity.Person;
 import com.example.watchmaking.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,15 +13,15 @@ import java.util.UUID;
 public class UserViewDto {
     UUID uuid;
     String email;
-    String password;
-    UUID userTypeUuid;
-    UUID personUuid;
+    String userType;
+    Boolean isDeleted;
+    PersonViewDto person;
 
     public UserViewDto(User user) {
         this.uuid = user.getUuid();
         this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.userTypeUuid = user.getUserType().getUuid();
-        this.personUuid = user.getPerson().getUuid();
+        this.userType = user.getUserType().getName();
+        this.isDeleted = user.getIsDeleted();
+        this.person = new PersonViewDto(user.getPerson());
     }
 }
