@@ -36,9 +36,9 @@ CREATE TABLE IF NOT EXISTS service_orders(
 
 CREATE TABLE IF NOT EXISTS service_order_items(
     uuid               UUID           PRIMARY KEY,
-    quantity           INTEGER        NOT NULL CHECK (quantity > 0),
-    unit_price         DECIMAL        NOT NULL,
-    subtotal           DECIMAL        GENERATED ALWAYS AS (quantity * unit_price) STORED,
+    quantity           INTEGER        NOT NULL CHECK (quantity > 0) DEFAULT 0,
+    unit_price         DECIMAL        NOT NULL CHECK (unit_price > 0) DEFAULT 0,
+    subtotal           DECIMAL        DEFAULT 0,
 
     service_order_uuid UUID           NOT NULL,
     watch_part_uuid    UUID           NOT NULL,

@@ -28,12 +28,12 @@ public class ServiceOrderViewDto {
     private LocalDateTime updatedAt;
 
     private String customerName;
-    private String technicianName;
+    private String technicianEmail;
     private Watch watch;
 
     private List<ServiceOrderItemViewDto> orderItems;
 
-    public ServiceOrderViewDto(String uuid, String description, String customerName, String technicianName,
+    public ServiceOrderViewDto(String uuid, String description, String customerName, String technicianEmail,
                                ServiceType serviceType, ServiceStatus status, BigDecimal price, LocalDateTime entryDate,
                                LocalDateTime deliveryDate, String note, LocalDateTime createdAt,
                                LocalDateTime updatedAt, List<ServiceOrderItemViewDto> orderItems) {
@@ -48,7 +48,7 @@ public class ServiceOrderViewDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.customerName = customerName;
-        this.technicianName = technicianName;
+        this.technicianEmail = technicianEmail;
         this.orderItems = orderItems;
     }
 }

@@ -4,12 +4,12 @@ import lombok.Getter;
 
 @Getter
 public enum ServiceType {
-    BATTERY_CHANGE("Battery Change"),
-    BRACELET_ADJUSTMENT("Bracelet Adjustment"),
-    GLASS_REPLACEMENT("Glass Replacement"),
-    CLEANING("Cleaning"),
-    MECHANISM_REPAIR("Mechanism Repair"),
-    INSPECTION_ONLY("Inspection Only");
+    BATTERY_CHANGE("BATTERY_CHANGE"),
+    BRACELET_ADJUSTMENT("BRACELET_ADJUSTMENT"),
+    GLASS_REPLACEMENT("GLASS_REPLACEMENT"),
+    CLEANING("CLEANING"),
+    MECHANISM_REPAIR("MECHANISM_REPAIR"),
+    INSPECTION_ONLY("INSPECTION_ONLY");
 
     private String displayName;
 

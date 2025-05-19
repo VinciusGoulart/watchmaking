@@ -22,7 +22,7 @@ public interface WatchPartRepository extends JpaRepository<WatchPart, UUID>  {
 
     @Query(value = """
                 SELECT name, code
-                FROM watch_categories
+                FROM watch_parts
                 WHERE is_deleted = FALSE
                   AND (LOWER(name) LIKE LOWER(concat('%', :search, '%'))
                        OR LOWER(code) LIKE LOWER(concat('%', :search, '%')))
@@ -32,14 +32,14 @@ public interface WatchPartRepository extends JpaRepository<WatchPart, UUID>  {
 
     @Query(value = """
     SELECT uuid, name, code, is_deleted
-    FROM watch_categories
+    FROM watch_parts
     WHERE is_deleted = false
       AND (LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))
            OR LOWER(code) LIKE LOWER(CONCAT('%', :search, '%')))
     ORDER BY created_at
 """,
             countQuery = """
-    SELECT COUNT(*) FROM watch_categories
+    SELECT COUNT(*) FROM watch_parts
     WHERE is_deleted = false
       AND (LOWER(name) LIKE LOWER(CONCAT('%', :search, '%'))
            OR LOWER(code) LIKE LOWER(CONCAT('%', :search, '%')))

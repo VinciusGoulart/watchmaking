@@ -20,7 +20,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServiceOrderCreateDto {
+public class ServiceOrderUpdateDto {
 
     @NotBlank
     private String description;
@@ -34,21 +34,8 @@ public class ServiceOrderCreateDto {
     @Positive
     private BigDecimal price;
 
-    private LocalDateTime entryDate = LocalDateTime.now();
-
     @Future(message = "Data de entrega deve ser no futuro")
     private LocalDateTime deliveryDate;
 
     private String note;
-
-    @NotNull
-    private UUID customerUuid;
-
-    @NotNull
-    private UUID watchUuid;
-
-    @NotNull
-    private UUID technicianUuid;
-
-    private List<@Valid ServiceOrderItemCreateDto> orderItems;
 }

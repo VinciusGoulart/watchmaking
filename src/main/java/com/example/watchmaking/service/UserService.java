@@ -15,6 +15,10 @@ import com.example.watchmaking.repository.UserTypeRepository;
 import com.example.watchmaking.util.expcetions.NotFoundException;
 import com.example.watchmaking.util.expcetions.ResourceExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +39,8 @@ public class UserService {
 
     @Autowired
     private UserTypeRepository userTypeRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Transactional
@@ -61,11 +67,15 @@ public class UserService {
                 address));
 
         UserType userType = userTypeRepository.findById(dto.getUserTypeUuid())
-                .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Tipo de Usuário não encontrado"));
+
+
+        String password = dto.getPassword();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(password);
 
         User user = new User(
                 dto.getEmail(),
-                dto.getPassword(),
+                encryptedPassword,
                 userType,
                 person);
 
@@ -74,7 +84,7 @@ public class UserService {
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("Usuario não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
     @Transactional
@@ -85,15 +95,22 @@ public class UserService {
     }
 
     @Transactional
-    public void updatePasswordByEmail(String email, UserUpdatePasswordDto newPassword) {
-        User user = this.findUserByEmail(email);
+    public void updatePasswordForAuthenticatedUser(UserUpdatePasswordDto passwordDto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        // TODO: codificar a senha com bcrypt (ex: newPassword = passwordEncoder.encode(newPassword))
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Senha atual incorreta");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(passwordDto.getNewPassword());
 
         User newUser = new User(
                 user.getUuid(),
                 user.getEmail(),
-                newPassword.getNewPassword(),
+                encodedNewPassword,
                 user.getUserType(),
                 user.getPerson()
         );

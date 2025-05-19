@@ -66,4 +66,11 @@ public class WatchService {
         return new PageImpl<>(watchViewDto, pageable, watches.getTotalElements());
     }
 
+    public void softDeleteWatch(UUID uuid) {
+        if (!watchRepository.existsByUuid(uuid)) {
+            throw new NotFoundException("Relógio não encontrado!");
+        }
+        watchRepository.softDeleteByUuid(uuid);
+    }
+
 }
