@@ -12,14 +12,22 @@ import com.example.watchmaking.repository.AddressRepository;
 import com.example.watchmaking.repository.PersonRepository;
 import com.example.watchmaking.repository.UserRepository;
 import com.example.watchmaking.repository.UserTypeRepository;
+import com.example.watchmaking.util.expcetions.ResourceExistsException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,6 +52,10 @@ class UserServiceTest {
 
     @InjectMocks
     private UserService userService;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
 
     private UserCreateDto userCreateDto;
     private Address address;
@@ -116,6 +128,11 @@ class UserServiceTest {
                 userType,
                 person
         );
+    }
+
+    @AfterEach()
+    void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -191,7 +208,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(any())).thenReturn(true);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        assertThrows(ResourceExistsException.class, () -> userService.createUser(userCreateDto));
     }
 
     @Test
@@ -200,7 +217,7 @@ class UserServiceTest {
         when(userRepository.existsUserByPerson_Cpf(any())).thenReturn(true);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        assertThrows(ResourceExistsException.class, () -> userService.createUser(userCreateDto));
     }
 
     @Test
@@ -228,20 +245,28 @@ class UserServiceTest {
     }
 
     @Test
-    void updatePasswordByEmail_Success() {
-        // Arrange
-        String email = "joao@teste.com";
-        UserUpdatePasswordDto dto = new UserUpdatePasswordDto("Nova@Senha1");
+    void updatePasswordForAuthenticatedUser_Success() {
+        UserUpdatePasswordDto dto = new UserUpdatePasswordDto("senhaNova", "senha123");
 
-        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken("joao@teste.com", null, List.of());
 
-        // Act
-        userService.updatePasswordByEmail(email, dto);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Assert
-        verify(userRepository).findByEmail(email);
+        when(userRepository.findByEmail("joao@teste.com")).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("senha123", "senha123")).thenReturn(true);
+        when(passwordEncoder.encode("senhaNova")).thenReturn("senhaNovaCodificada");
+
+        userService.updatePasswordForAuthenticatedUser(dto);
+
+        verify(userRepository).findByEmail("joao@teste.com");
+        verify(passwordEncoder).matches("senha123", "senha123");
+        verify(passwordEncoder).encode("senhaNova");
         verify(userRepository).save(any(User.class));
     }
+
+
+
+
 
 }

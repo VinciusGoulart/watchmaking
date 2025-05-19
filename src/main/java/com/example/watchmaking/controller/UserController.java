@@ -28,9 +28,9 @@ public class UserController {
         return ResponseEntity.ok(userViewDto);
     }
 
-    @PutMapping("/updatePassword/{email}")
-    public ResponseEntity<String> updatePassword(@PathVariable String email,@Valid @RequestBody UserUpdatePasswordDto newPassword) {
-        userService.updatePasswordByEmail(email, newPassword);
+    @PutMapping("/updatePassword")
+    public ResponseEntity<String> updatePassword(@Valid @RequestBody UserUpdatePasswordDto newPassword) {
+        userService.updatePasswordForAuthenticatedUser(newPassword);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

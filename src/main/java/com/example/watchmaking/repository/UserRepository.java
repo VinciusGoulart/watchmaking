@@ -1,7 +1,7 @@
 package com.example.watchmaking.repository;
 
 import com.example.watchmaking.entity.User;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +14,7 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    @EntityGraph(attributePaths = {"userType"})
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
@@ -32,4 +33,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             """)
     Optional<User> findTechnicalByUuid(@Param("technicianUuid") UUID technicianUuid);
 
+    @EntityGraph(attributePaths = {"userType"})
+    Optional<User> findByEmailAndIsDeletedFalse(String email);
 }

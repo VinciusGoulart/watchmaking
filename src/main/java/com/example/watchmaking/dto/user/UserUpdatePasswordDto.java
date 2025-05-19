@@ -14,4 +14,8 @@ public class UserUpdatePasswordDto {
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$", message = "A senha deve conter no mínimo 8" +
             " caracteres, incluindo letra maiúscula, letra minúscula e um caractere especial.")
     String newPassword;
+
+    @NotBlank
+    @Length(min = 8, max = 255)
+    String oldPassword;
 }
